@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import StickyVoiceAssistant from "./StickyVoiceAssistant";
 import {
   Mic,
   MicOff,
@@ -394,6 +395,18 @@ export default function GuidedDetailsWizard({
     [answers, questions],
   );
 
+  const replayGuide = () => {
+    if (phase === "questions" && current) {
+      speak(current.spokenPrompt);
+      return;
+    }
+
+    const summary = answeredList
+      .map((row) => `${humanize(row.question.attribute)}: ${row.value}`)
+      .join(". ");
+    speak(summary ? `Please confirm. ${summary}.` : "Please review the answers.");
+  };
+
   const progress = questions.length > 0 ? ((step + 1) / questions.length) * 100 : 0;
 
   if (!open) return null;
@@ -758,6 +771,10 @@ export default function GuidedDetailsWizard({
           </div>
         )}
       </div>
+
+      {(current || phase === "review") && (
+        <StickyVoiceAssistant speaking={speaking} onReplay={replayGuide} />
+      )}
     </div>
   );
 }

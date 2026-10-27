@@ -51,11 +51,11 @@ export async function POST(
         },
         body: JSON.stringify({
           model: "claude-3-5-haiku-latest",
-          max_tokens: 600,
+          max_tokens: 180,
           system:
-            "You write short spoken confirmations for a seller reviewing car part details. " +
+            "You write very brief spoken confirmations for a seller reviewing car part details. " +
             "Use plain, friendly English. No markdown, no lists, no bullet characters. " +
-            "Keep it under 120 words. End by asking whether everything is correct.",
+            "Keep it under 35 words. State the supplied values and end with: Is that correct?",
           messages: [
             {
               role: "user",
@@ -113,12 +113,12 @@ function buildLocalScript(
   lines: { label: string; value: string }[],
 ): string {
   if (lines.length === 0) {
-    return `I could not collect any new details for ${partName}. Please review the part record and add anything that is missing. Is everything correct?`;
+    return `No new details for ${partName}. Please review the record.`;
   }
 
   const spoken = lines
-    .map((l) => `${l.label} is ${l.value}`)
+    .map((l) => `${l.label}: ${l.value}`)
     .join(". ");
 
-  return `Here is a summary of the details you provided for ${partName}. ${spoken}. Please check that everything is correct before we continue. Is everything correct?`;
+  return `${partName}. ${spoken}. Is that correct?`;
 }

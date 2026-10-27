@@ -40,7 +40,7 @@ export async function GET(
         howToCheck: q.howToCheck,
         candidates: q.candidates,
         conflictingSources: q.conflictingSources,
-        spokenPrompt: buildSpokenPrompt(q.title, q.howToCheck, index + 1, questions.length),
+        spokenPrompt: buildSpokenPrompt(q.title, index + 1),
       })),
       readiness: {
         status: readiness.status,
@@ -59,12 +59,7 @@ export async function GET(
 /**
  * Turns a question into a natural sentence the browser can read aloud.
  */
-function buildSpokenPrompt(
-  title: string,
-  howToCheck: string,
-  index: number,
-  total: number,
-): string {
+function buildSpokenPrompt(title: string, index: number): string {
   const clean = title.replace(/\s*\(.*?\)\s*/g, " ").replace(/\s+/g, " ").trim();
-  return `Question ${index} of ${total}. ${clean}. ${howToCheck}`;
+  return `Question ${index}. ${clean}. Please answer.`;
 }
