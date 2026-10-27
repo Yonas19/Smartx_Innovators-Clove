@@ -22,6 +22,7 @@ import {
   Shield,
 } from "lucide-react";
 import { isArabic } from "@/lib/utils";
+import CameraCapture from "@/components/CameraCapture";
 
 interface UploadedFile {
   id: string;
@@ -305,6 +306,8 @@ function IntakeForPartClient() {
             </div>
           </div>
         </motion.div>
+
+        <CameraCapture onCapture={(file) => handleFilesWithObjects([file])} />
 
         {/* Files list */}
         <AnimatePresence>
