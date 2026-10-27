@@ -224,7 +224,7 @@ export default function LandingPage() {
                   href="/dashboard"
                   className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-6 py-3.5 text-base font-semibold text-slate-700 transition-all hover:border-slate-400 hover:bg-slate-50 sm:w-auto"
                 >
-                  View demo data
+                  Open inventory
                 </Link>
               </motion.div>
 

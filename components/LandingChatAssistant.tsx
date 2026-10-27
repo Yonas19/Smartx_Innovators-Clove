@@ -163,7 +163,7 @@ export default function LandingChatAssistant() {
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="group relative flex h-52 w-36 items-end justify-center transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 sm:h-64 sm:w-44"
+          className="group relative flex h-64 w-44 items-end justify-center transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 sm:h-80 sm:w-56"
           aria-label="Open Clove assistant"
           title="Ask Clove"
         >
