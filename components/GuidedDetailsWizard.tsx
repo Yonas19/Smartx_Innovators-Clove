@@ -132,31 +132,92 @@ export default function GuidedDetailsWizard({
     setVoiceAvailable(Boolean(window.SpeechRecognition ?? window.webkitSpeechRecognition));
   }, []);
 
-  /* --- Speech synthesis (read the guide aloud) --- */
+  /* --- Speech: ElevenLabs audio first, browser synthesis as fallback --- */
+
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const speak = useCallback((text: string) => {
     if (typeof window === "undefined" || !text) return;
+
+    try {
+      audioRef.current?.pause();
+      audioRef.current = null;
+    } catch {
+      /* ignore */
+    }
+
     const synth = window.speechSynthesis;
     if (!synth) return;
-    try {
-      synth.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = "en-US";
-      utterance.rate = 1;
-      utterance.pitch = 1;
-      utterance.onstart = () => setSpeaking(true);
-      utterance.onend = () => setSpeaking(false);
-      utterance.onerror = () => setSpeaking(false);
-      synth.speak(utterance);
-    } catch {
-      setSpeaking(false);
-    }
-  }, []);
+
+    let cancelled = false;
+    const browserSpeak = () => {
+      if (cancelled) return;
+      try {
+        synth.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = "en-US";
+        utterance.rate = 1.05;
+        utterance.pitch = 1;
+        utterance.onstart = () => setSpeaking(true);
+        utterance.onend = () => setSpeaking(false);
+        utterance.onerror = () => setSpeaking(false);
+        synth.speak(utterance);
+      } catch {
+        setSpeaking(false);
+      }
+    };
+
+    (async () => {
+      try {
+        const res = await fetch(`/api/parts/${partId}/speech?audio=1`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ script: text }),
+        });
+
+        if (!res.ok) {
+          browserSpeak();
+          return;
+        }
+
+        const contentType = res.headers.get("Content-Type") ?? "";
+        if (!contentType.includes("audio")) {
+          browserSpeak();
+          return;
+        }
+
+        const blob = await res.blob();
+        if (cancelled) return;
+
+        const audio = new Audio(URL.createObjectURL(blob));
+        audio.onplay = () => setSpeaking(true);
+        audio.onended = () => setSpeaking(false);
+        audio.onerror = () => {
+          setSpeaking(false);
+          browserSpeak();
+        };
+        audioRef.current = audio;
+        await audio.play();
+      } catch {
+        browserSpeak();
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [partId]);
 
   const stopSpeaking = useCallback(() => {
     if (typeof window === "undefined") return;
     try {
       window.speechSynthesis?.cancel();
+    } catch {
+      /* ignore */
+    }
+    try {
+      audioRef.current?.pause();
+      audioRef.current = null;
     } catch {
       /* ignore */
     }

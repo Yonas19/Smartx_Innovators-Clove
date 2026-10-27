@@ -3,6 +3,12 @@
 import { useEffect, useState } from "react";
 import { Volume2 } from "lucide-react";
 
+const TALKING_FRAMES = Array.from(
+  { length: 50 },
+  (_, index) =>
+    `/assistant/talking-frames/ezgif-frame-${String(index + 1).padStart(3, "0")}.jpg`,
+);
+
 export default function StickyVoiceAssistant({
   speaking,
   onReplay,
@@ -10,15 +16,18 @@ export default function StickyVoiceAssistant({
   speaking: boolean;
   onReplay: () => void;
 }) {
-  const [frame, setFrame] = useState(false);
+  const [frameIndex, setFrameIndex] = useState(0);
 
   useEffect(() => {
     if (!speaking) {
-      setFrame(false);
+      setFrameIndex(0);
       return;
     }
 
-    const timer = window.setInterval(() => setFrame((value) => !value), 220);
+    const timer = window.setInterval(() => {
+      setFrameIndex((index) => (index + 1) % TALKING_FRAMES.length);
+    }, 85);
+
     return () => window.clearInterval(timer);
   }, [speaking]);
 
@@ -40,12 +49,12 @@ export default function StickyVoiceAssistant({
       >
         <img
           src={
-            speaking && frame
-              ? "/assistant/clove-assistant-speaking.png"
+            speaking
+              ? TALKING_FRAMES[frameIndex]
               : "/assistant/clove-assistant-idle.png"
           }
           alt="Clove voice guide"
-          className={`h-full w-full object-contain object-bottom drop-shadow-xl transition-transform duration-150 ${
+          className={`h-full w-full object-contain object-bottom drop-shadow-xl transition-transform duration-100 ${
             speaking ? "scale-[1.04]" : "scale-100"
           }`}
         />

@@ -1,16 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDb, schema } from "@/lib/db/client";
+import { textToSpeech } from "@/lib/tts";
 
 export const dynamic = "force-dynamic";
 
 /**
- * POST /api/parts/[id]/speech
+ * POST /api/parts/[id]/speech?audio=1
  *
- * Generates the spoken confirmation script that the browser reads back to the
- * seller before they approve the collected answers.
+ * Generates the spoken confirmation script that the seller hears before they
+ * approve the collected answers.
  *
- * Uses Claude when ANTHROPIC_API_KEY is configured, and falls back to a
- * deterministic local generator so the feature always works offline.
+ * With ?audio=1 the script is rendered with ElevenLabs and returned as MP3.
+ * Without it the route returns the script text (plus an AI-written variant when
+ * ANTHROPIC_API_KEY is configured) so the browser can fall back to its own
+ * speech synthesis when ElevenLabs is unavailable.
  */
 export async function POST(
   req: NextRequest,
@@ -21,12 +24,33 @@ export async function POST(
     const body = (await req.json()) as {
       answers?: Record<string, string>;
       partName?: string;
+      /** When provided, this exact script is rendered instead of a summary. */
+      script?: string;
     };
 
     const answers = body.answers ?? {};
     const db = getDb();
     const part = db.select().from(schema.parts).all().find((p) => p.id === partId);
     const partName = body.partName || part?.displayName || partId;
+    const wantsAudio = req.nextUrl.searchParams.get("audio") === "1";
+
+    const inlineScript = (body.script ?? "").trim();
+    if (inlineScript) {
+      if (wantsAudio) {
+        const speech = await textToSpeech(inlineScript);
+        if (speech.audio) {
+          return new NextResponse(new Uint8Array(speech.audio), {
+            status: 200,
+            headers: {
+              "Content-Type": "audio/mpeg",
+              "Cache-Control": "no-store",
+            },
+          });
+        }
+      }
+
+      return NextResponse.json({ text: inlineScript, source: "inline" });
+    }
 
     const lines = Object.entries(answers).map(([attribute, value]) => ({
       attribute,
@@ -35,6 +59,25 @@ export async function POST(
     }));
 
     const fallback = buildLocalScript(partName, lines);
+
+    // Realistic voice first; the browser synthesizer is the fallback.
+    if (wantsAudio) {
+      const speech = await textToSpeech(fallback);
+      if (speech.audio) {
+        return new NextResponse(new Uint8Array(speech.audio), {
+          status: 200,
+          headers: {
+            "Content-Type": "audio/mpeg",
+            "Cache-Control": "no-store",
+          },
+        });
+      }
+
+      return NextResponse.json(
+        { text: fallback, source: "browser_fallback" },
+        { status: 200 },
+      );
+    }
 
     const key = process.env.ANTHROPIC_API_KEY;
     if (!key) {
