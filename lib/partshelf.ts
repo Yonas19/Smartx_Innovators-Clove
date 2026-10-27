@@ -1,5 +1,5 @@
 /**
- * PartShelf intake types, validation rules and mock AI helpers.
+ * Clove intake types, validation rules and mock AI helpers.
  */
 
 export type UsedOrNew = "Used" | "New" | "Unknown";
@@ -323,8 +323,8 @@ export function buildActionPlan(record: PartRecord): ActionItem[] {
   return items.sort((a, b) => a.priority - b.priority);
 }
 
-export const STORAGE_KEY = "partshelf-intake-draft-v1";
-export const INVENTORY_STORAGE_KEY = "partshelf-posted-products-v1";
+export const STORAGE_KEY = "clove-intake-draft-v1";
+export const INVENTORY_STORAGE_KEY = "clove-posted-products-v1";
 
 export interface PostedProduct {
   id: string;

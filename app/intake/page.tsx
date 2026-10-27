@@ -284,8 +284,8 @@ export default function IntakePage() {
       </main>
 
       <IntakeVoiceAssistant
-        photoCount={photos.length}
-        onFill={handleVoiceFill}
+        record={record}
+        onAnswer={handleVoiceFill}
       />
 
       <Confetti

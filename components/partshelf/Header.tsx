@@ -17,7 +17,7 @@ export default function Header({ active = "intake" }: Props) {
           </div>
           <div className="flex flex-col leading-none">
             <span className="text-sm font-bold tracking-tight text-slate-900">
-              PartShelf
+              Clove
             </span>
             <span className="text-[9px] font-semibold uppercase tracking-widest text-slate-400">
               Parts Intake · إدخال القطع
