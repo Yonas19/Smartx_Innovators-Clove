@@ -192,7 +192,8 @@ function IntakeForPartClient() {
       ]);
 
       await new Promise((r) => setTimeout(r, 800));
-      router.push(`/parts/${partId}`);
+      // Open the dashboard's guided details popup immediately after analysis.
+      router.push(`/dashboard?guide=${encodeURIComponent(partId)}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
       setIsUploading(false);

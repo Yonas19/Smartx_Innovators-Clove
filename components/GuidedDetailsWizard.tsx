@@ -119,11 +119,17 @@ export default function GuidedDetailsWizard({
   const [saving, setSaving] = useState(false);
   const [listening, setListening] = useState(false);
   const [speaking, setSpeaking] = useState(false);
+  const [voiceAvailable, setVoiceAvailable] = useState(false);
 
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
   const openedForRef = useRef<string | null>(null);
 
   const current = questions[step] ?? null;
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    setVoiceAvailable(Boolean(window.SpeechRecognition ?? window.webkitSpeechRecognition));
+  }, []);
 
   /* --- Speech synthesis (read the guide aloud) --- */
 
@@ -598,12 +604,19 @@ export default function GuidedDetailsWizard({
                   />
                   <button
                     onClick={listening ? stopListening : startListening}
-                    title={listening ? "Stop listening" : "Speak your answer"}
+                    disabled={!voiceAvailable}
+                    title={
+                      !voiceAvailable
+                        ? "Voice input requires Chrome or Edge with microphone permission"
+                        : listening
+                          ? "Stop listening"
+                          : "Speak your answer"
+                    }
                     aria-label={listening ? "Stop listening" : "Speak your answer"}
-                    className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg transition-all ${
+                    className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg transition-all disabled:cursor-not-allowed disabled:opacity-40 ${
                       listening
                         ? "animate-pulse bg-red-500 text-white"
-                        : "border border-slate-300 bg-white text-slate-600 hover:border-indigo-400 hover:text-indigo-600"
+                        : "border border-slate-300 bg-white text-slate-600 hover:border-emerald-400 hover:text-emerald-600"
                     }`}
                   >
                     {listening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
@@ -624,6 +637,11 @@ export default function GuidedDetailsWizard({
                 {listening && (
                   <p className="mt-1.5 text-xs font-medium text-red-600">
                     Listening... say your answer out loud.
+                  </p>
+                )}
+                {!voiceAvailable && (
+                  <p className="mt-1.5 text-xs text-slate-500">
+                    Voice input is available in Chrome or Edge after allowing microphone access.
                   </p>
                 )}
               </div>
