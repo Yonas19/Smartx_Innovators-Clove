@@ -6,7 +6,7 @@ import { Volume2 } from "lucide-react";
 const TALKING_FRAMES = Array.from(
   { length: 50 },
   (_, index) =>
-    `/assistant/talking-frames/ezgif-frame-${String(index + 1).padStart(3, "0")}.jpg`,
+    `/assistant/talking-frames-transparent/ezgif-frame-${String(index + 1).padStart(3, "0")}.png`,
 );
 
 export default function StickyVoiceAssistant({
