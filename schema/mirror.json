@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Side-View Mirror Schema v1",
+  "description": "Mock schema for side-view mirrors. Required fields are flagged. Adding a part family means adding a new JSON file, no code change.",
+  "version": "1.0.0",
+  "partType": "mirror",
+  "attributes": [
+    { "name": "partType", "label": "Part Type", "required": true, "type": "string", "default": "mirror" },
+    { "name": "brand", "label": "Brand", "required": true, "type": "string", "placeholder": "e.g. Genuine OEM, TYC, Depo" },
+    { "name": "partNumber", "label": "Part Number", "required": true, "type": "string", "placeholder": "OEM or aftermarket part number" },
+    { "name": "side", "label": "Side", "required": true, "type": "enum", "options": ["L", "R", "Unknown"] },
+    { "name": "donorMake", "label": "Donor Make", "required": true, "type": "string", "placeholder": "e.g. Toyota, Nissan" },
+    { "name": "donorModel", "label": "Donor Model", "required": true, "type": "string", "placeholder": "e.g. Camry, Altima" },
+    { "name": "donorYear", "label": "Donor Year", "required": true, "type": "string", "placeholder": "e.g. 2017" },
+    { "name": "functions", "label": "Functions", "required": true, "type": "multi", "options": ["heated", "folding", "power", "signal", "auto-dim", "memory"] },
+    { "name": "visibleDamage", "label": "Visible Damage", "required": true, "type": "string", "placeholder": "e.g. Scratched housing, broken mounting tab" },
+    { "name": "electricalTestStatus", "label": "Electrical Test Status", "required": true, "type": "enum", "options": ["passed", "failed", "not_tested", "unknown"] },
+    { "name": "accessories", "label": "Accessories", "required": false, "type": "string", "placeholder": "e.g. mounting screws, wiring harness" },
+    { "name": "photoRefs", "label": "Photo References", "required": true, "type": "string" },
+    { "name": "price", "label": "Price (AED)", "required": true, "type": "string", "placeholder": "e.g. 350" },
+    { "name": "storageLocation", "label": "Storage Location", "required": true, "type": "string", "placeholder": "e.g. Rack A-3" },
+    { "name": "packagedDimensions", "label": "Packaged Dimensions (cm)", "required": false, "type": "string", "placeholder": "e.g. 35x20x15" },
+    { "name": "packagedWeight", "label": "Packaged Weight (kg)", "required": false, "type": "string", "placeholder": "e.g. 1.2" }
+  ]
+}

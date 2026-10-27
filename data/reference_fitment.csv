@@ -1,0 +1,11 @@
+partNumber,donorMake,donorModel,donorYear,side,functions,fitmentNotes
+81110-06B20,Toyota,Camry,2017,L,heated;power,Fits 2015-2017 Camry (not 2018+ facelift)
+81110-06B21,Toyota,Camry,2018,L,heated;power,Fits 2018-2019 Camry (facelift)
+96301-CN000,Nissan,Altima,2017,R,folding;power;signal,Fits 2013-2018 Altima L33
+96300-CN001,Nissan,Altima,2017,L,folding;power;signal,Fits 2013-2018 Altima L33
+5134925AG,BMW,3-Series,2016,R,heated;folding;power;auto-dim,Fits 2012-2018 F30 3-Series
+5134926AG,BMW,3-Series,2016,L,heated;folding;power;auto-dim,Fits 2012-2018 F30 3-Series
+GV8R-17K707-BB,Land Rover,Range Rover Sport,2015,L,heated;folding;power;memory;signal,Fits 2014-2017 L494 Range Rover Sport
+GV8R-17K707-AB,Land Rover,Range Rover Sport,2015,R,heated;folding;power;memory;signal,Fits 2014-2017 L494 Range Rover Sport
+7P1-857-501B,VW,Touareg,2014,R,heated;power;auto-dim,Fits 2011-2017 Touareg 7P
+7P1-857-501A,VW,Touareg,2014,L,heated;power;auto-dim,Fits 2011-2017 Touareg 7P

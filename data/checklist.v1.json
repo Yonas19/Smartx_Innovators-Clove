@@ -1,0 +1,87 @@
+{
+  "version": "v1",
+  "description": "Readiness checklist for side-view mirrors. Each item must pass before a draft can be approved. Mock until organizers supply the real one.",
+  "items": [
+    {
+      "id": "CL-001",
+      "label": "Part number present",
+      "attribute": "partNumber",
+      "check": "non_empty",
+      "blocking": true
+    },
+    {
+      "id": "CL-002",
+      "label": "Part number matches reference (or explicitly unverified)",
+      "attribute": "partNumber",
+      "check": "reference_match_or_unverified",
+      "blocking": true
+    },
+    {
+      "id": "CL-003",
+      "label": "No unresolved conflicts on required fields",
+      "check": "no_conflicts",
+      "blocking": true
+    },
+    {
+      "id": "CL-004",
+      "label": "Side (L/R) determined",
+      "attribute": "side",
+      "check": "non_empty",
+      "blocking": true
+    },
+    {
+      "id": "CL-005",
+      "label": "Visible damage documented",
+      "attribute": "visibleDamage",
+      "check": "non_empty",
+      "blocking": true
+    },
+    {
+      "id": "CL-006",
+      "label": "Electrical test status is not 'unknown'",
+      "attribute": "electricalTestStatus",
+      "check": "not_unknown",
+      "blocking": true
+    },
+    {
+      "id": "CL-007",
+      "label": "Electrical test status not inferred from photo",
+      "attribute": "electricalTestStatus",
+      "check": "not_photo_inferred",
+      "blocking": true
+    },
+    {
+      "id": "CL-008",
+      "label": "Defect disclosure present in draft",
+      "check": "defect_disclosure",
+      "blocking": true
+    },
+    {
+      "id": "CL-009",
+      "label": "No unsafe promises (fitment/customs/authenticity)",
+      "check": "no_unsafe_promises",
+      "blocking": true
+    },
+    {
+      "id": "CL-010",
+      "label": "Photo evidence attached",
+      "attribute": "photoRefs",
+      "check": "non_empty",
+      "blocking": true
+    },
+    {
+      "id": "CL-011",
+      "label": "Price set",
+      "attribute": "price",
+      "check": "non_empty",
+      "blocking": false
+    },
+    {
+      "id": "CL-012",
+      "label": "Storage location set",
+      "attribute": "storageLocation",
+      "check": "non_empty",
+      "blocking": false
+    }
+  ]
+}
